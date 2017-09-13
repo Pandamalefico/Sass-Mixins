@@ -1,0 +1,36 @@
+
+//Define Size of element
+@mixin size($width,$height:$width)
+  width: $width
+  height: $height
+  @content
+
+@mixin relative
+  position: relative
+  @content
+
+@mixin absolute
+  position: absolute
+  @content
+
+@mixin center
+  margin: 0 auto
+  @content
+
+//Set positioning coordinates
+
+@mixin pos($top:0,$left:0,$right:0,$bottom:0)
+  @if $top != 0
+    top: $top
+  @if $left != 0
+    left: $left
+  @if $right != 0
+    right: $right
+  @if $bottom != 0
+    bottom: $bottom
+  @content
+
+@mixin initPseudo
+  content: ""
+  position: absolute
+  @content
