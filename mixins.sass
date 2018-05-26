@@ -1,25 +1,35 @@
+//============================================================
+// Positioning // Sizing
+//============================================================
 
-//Define Size of element
+//Define Size of element (One value if width and height are the same)
 @mixin size($width,$height:$width)
   width: $width
   height: $height
-  @content
 
-@mixin relative
+@mixin flexCenter
+  display: flex
+  justify-content: flex-start
+  align-items: center
+
+@mixin flexColumn
+  display: flex
+  flex-direction: column
+
+@mixin relative 
   position: relative
-  @content
 
 @mixin absolute
   position: absolute
-  @content
+
+@mixin fixed
+  position: fixed
 
 @mixin center
   margin: 0 auto
-  @content
 
-//Set positioning coordinates
-
-@mixin pos($top:0,$left:0,$right:0,$bottom:0)
+//Set position coordinates
+@mixin pos($top:0,$right:0,$bottom:0,$left:0)
   @if $top != 0
     top: $top
   @if $left != 0
@@ -28,9 +38,65 @@
     right: $right
   @if $bottom != 0
     bottom: $bottom
-  @content
+
+
+
+//============================================================
+// Shape
+//============================================================
+
+@mixin circle
+  border-radius: 50%
+
+
+
+//============================================================
+// Typography
+//============================================================
+
+
+// Dynamic font-size based on min and max container size and min and max font-size
+@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) 
+  $u1: unit($min-vw)
+  $u2: unit($max-vw)
+  $u3: unit($min-font-size)
+  $u4: unit($max-font-size)
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 
+    & 
+      font-size: $min-font-size
+      @media screen and (min-width: $min-vw) 
+        font-size: calc(#{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}))
+      
+      @media screen and (min-width: $max-vw) 
+        font-size: $max-font-size  
+    @else 
+      @error "font-size and container size must have the same unit"
+
+
+
+
+//============================================================
+// Utilities
+//============================================================
 
 @mixin initPseudo
   content: ""
   position: absolute
-  @content
+
+// Strip unit from a value (Ex 24px => 24)  
+@function strip-unit($value) 
+  @return $value / ($value * 0 + 1)
+
+
+//Set opacity with IE support  
+@mixin opacity($opacity) 
+  opacity: $opacity
+  filter: alpha(opacity=($opacity * 100)) // IE
+ 
+
+
+//============================================================
+// Transform
+//============================================================
+
